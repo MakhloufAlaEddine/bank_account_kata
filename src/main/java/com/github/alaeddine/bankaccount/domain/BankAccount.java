@@ -1,5 +1,6 @@
 package com.github.alaeddine.bankaccount.domain;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -7,23 +8,23 @@ public class BankAccount {
 
     private List<Operation> operationList = new ArrayList<Operation>();
 
-    private double currentBalance = 0d;
+    private MonetaryAmount currentBalance = new MonetaryAmount(0);
 
-    public void deposit(double i) {
+    public void deposit(MonetaryAmount ma) {
 
-        operationList.add(new Operation(OperationType.DEPOSIT, i, currentBalance));
+        operationList.add(new Operation(OperationType.DEPOSIT, ma, currentBalance));
 
-        currentBalance += i;
+        currentBalance = currentBalance.add(ma);
 
     }
 
-    public double getBalance() {
+    public MonetaryAmount getBalance() {
         return currentBalance;
     }
 
-    public void withdraw(double i) {
-        operationList.add(new Operation(OperationType.WITHDRAWAL, i, currentBalance));
-        currentBalance -= i;
+    public void withdraw(MonetaryAmount ma) {
+        operationList.add(new Operation(OperationType.WITHDRAWAL, ma, currentBalance));
+        currentBalance = currentBalance.subtract(ma);
     }
 
     public List<Operation> getOperations() {

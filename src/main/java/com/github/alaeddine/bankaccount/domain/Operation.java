@@ -8,14 +8,14 @@ public class Operation {
 
     private OperationType operationType;
     private Date date;
-    private double amount;
-    private double currentBalance;
+    private MonetaryAmount amount;
+    private MonetaryAmount currentBalance;
 
-    public Operation(OperationType operationType, double amount, double previousBalance) {
+    public Operation(OperationType operationType, MonetaryAmount amount, MonetaryAmount previousBalance) {
         this.operationType = operationType;
         this.date = new Date();
         this.amount = amount;
-        this.currentBalance = OperationType.DEPOSIT == operationType ? previousBalance + amount : previousBalance - amount;
+        this.currentBalance = OperationType.DEPOSIT == operationType ? previousBalance.add(amount) : previousBalance.subtract(amount);
     }
 
     public OperationType getOperationType() {
@@ -34,19 +34,19 @@ public class Operation {
         this.date = date;
     }
 
-    public double getAmount() {
+    public MonetaryAmount getAmount() {
         return amount;
     }
 
-    public void setAmount(double amount) {
+    public void setAmount(MonetaryAmount amount) {
         this.amount = amount;
     }
 
-    public double getCurrentBalance() {
+    public MonetaryAmount getCurrentBalance() {
         return currentBalance;
     }
 
-    public void setCurrentBalance(double currentBalance) {
+    public void setCurrentBalance(MonetaryAmount currentBalance) {
         this.currentBalance = currentBalance;
     }
 
@@ -55,10 +55,10 @@ public class Operation {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Operation operation = (Operation) o;
-        return Double.compare(operation.amount, amount) == 0 &&
-                Double.compare(operation.currentBalance, currentBalance) == 0 &&
-                operationType == operation.operationType &&
-                date.equals(operation.date);
+        return operationType == operation.operationType &&
+                date.equals(operation.date) &&
+                amount.equals(operation.amount) &&
+                currentBalance.equals(operation.currentBalance);
     }
 
     @Override
